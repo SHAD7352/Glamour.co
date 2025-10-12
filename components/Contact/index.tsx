@@ -15,7 +15,7 @@ const Contact = () => {
                 Order Your Beautiful Flowers
               </h2>
               <p className="mb-12 text-base font-medium text-body-color">
-                Get in touch with us to discuss your flower needs. We'll help you create the perfect arrangement for any occasion.
+                We&apos;ll help you create the perfect arrangement for any occasion.
               </p>
               <form>
                 <div className="-mx-4 flex flex-wrap">

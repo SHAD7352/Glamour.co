@@ -2,6 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
 
 // Static product data
@@ -41,14 +42,13 @@ const ProductCard = ({ p }) => {
             className="bg-white dark:bg-gray-dark rounded-2xl shadow-md overflow-hidden flex flex-col transition-colors duration-300"
         >
             {/* Image */}
-            <div className="relative h-56 md:h-48 lg:h-56 overflow-hidden">
-                <img
-                    src={
-                        p.image ??
-                        "https://images.unsplash.com/photo-1524758631624-e2822e304c36?q=80&auto=format&fit=crop&w=1200"
-                    }
+            <div className="relative h-56 md:h-48 lg:h-56 w-full">
+                <Image
+                    src={p.image ?? "/images/flower/default.jpg"}
                     alt={p.name}
-                    className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-500"
+                    fill
+                    className="object-cover transform hover:scale-105 transition-transform duration-500"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 />
             </div>
 

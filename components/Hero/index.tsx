@@ -20,9 +20,9 @@ const Hero = () => {
                 <p className="dark:text-body-color-dark mb-12 text-base !leading-relaxed text-body-color sm:text-lg md:text-xl">
                   Discover our collection of handcrafted flowers and stunning bouquets.
                   Each arrangement is carefully created with love and attention to detail,
-                  perfect for any special occasion or to brighten someone's day.
+                  perfect for any special occasion or to brighten someone&apos;s day.
 
-                  From elegant roses to vibrant mixed bouquets, we bring nature's beauty
+                  From elegant roses to vibrant mixed bouquets, we bring nature&apos;s beauty
                   to your doorstep with our artisanal flower arrangements.
                 </p>
               </div>
