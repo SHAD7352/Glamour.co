@@ -1,0 +1,44 @@
+[
+  {
+    "id": 1,
+    "name": "Elegant Rose Bouquet",
+    "price": 45.99,
+    "image": "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?q=80&auto=format&fit=crop&w=800",
+    "shortDescription": "A stunning arrangement of red roses perfect for romantic occasions and special celebrations."
+  },
+  {
+    "id": 2,
+    "name": "Spring Mixed Bouquet",
+    "price": 38.50,
+    "image": "https://images.unsplash.com/photo-1563241527-3004b7be99c4?q=80&auto=format&fit=crop&w=800",
+    "shortDescription": "Fresh spring flowers including tulips, daffodils, and cherry blossoms in a beautiful mixed arrangement."
+  },
+  {
+    "id": 3,
+    "name": "White Lily Arrangement",
+    "price": 52.00,
+    "image": "https://images.unsplash.com/photo-1520763185298-1b434c919650?q=80&auto=format&fit=crop&w=800",
+    "shortDescription": "Pure white lilies arranged elegantly, perfect for weddings, anniversaries, and memorial services."
+  },
+  {
+    "id": 4,
+    "name": "Sunflower Collection",
+    "price": 42.75,
+    "image": "https://images.unsplash.com/photo-1597848212624-e19ebf073b00?q=80&auto=format&fit=crop&w=800",
+    "shortDescription": "Bright and cheerful sunflowers that bring warmth and happiness to any space or occasion."
+  },
+  {
+    "id": 5,
+    "name": "Orchid Garden",
+    "price": 65.00,
+    "image": "https://images.unsplash.com/photo-1518709268805-4e9042af2176?q=80&auto=format&fit=crop&w=800",
+    "shortDescription": "Exotic orchids in various colors, creating an elegant and sophisticated floral display."
+  },
+  {
+    "id": 6,
+    "name": "Wildflower Meadow",
+    "price": 35.25,
+    "image": "https://images.unsplash.com/photo-1490750967868-88aa4486c946?q=80&auto=format&fit=crop&w=800",
+    "shortDescription": "A natural arrangement of wildflowers that captures the beauty of a countryside meadow."
+  }
+]
