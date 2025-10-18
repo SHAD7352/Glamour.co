@@ -1,0 +1,23 @@
+[
+    {
+        "id": 1,
+        "name": "Classic Rose Bouquet",
+        "price": 49.99,
+        "shortDescription": "A timeless arrangement of a dozen red roses, perfect for any occasion.",
+        "image": "/images/flower/flower-1.jpg"
+    },
+    {
+        "id": 2,
+        "name": "Sunny Day Lilies",
+        "price": 39.5,
+        "shortDescription": "Brighten someone's day with these vibrant and fragrant lilies.",
+        "image": "/images/flower/flower-2.jpg"
+    },
+    {
+        "id": 3,
+        "name": "Elegant Orchid Plant",
+        "price": 75.0,
+        "shortDescription": "A sophisticated and long-lasting orchid for modern spaces.",
+        "image": "/images/flower/flower-3.jpg"
+    }
+]
