@@ -5,11 +5,12 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "images.unsplash.com",
-        port: "",
-        pathname: "/**",
+        hostname: "localhost",
+        port: "7188", // Your API's port
+        pathname: "/images/**", // Allow all images from this path
       },
     ],
+    unoptimized: true, // Disable Next.js image optimization for external images
   },
 };
 
