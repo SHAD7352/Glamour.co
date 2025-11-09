@@ -3,7 +3,7 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { Product } from "@/types/domain/product";
-import { formatPrice } from "@/lib/utils";
+import { formatPrice, createWhatsAppLinkWithoutNo } from "@/lib/utils";
 import { Card, CardContent, CardFooter, CardTitle } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 interface ProductCardProps {
@@ -28,6 +28,9 @@ export default function ProductCard({
     ? `${baseUrl}${relativeImageUrl}`
     : null;
 
+  const message = `Hi, I am interested in ${product.name}. Please share more details.`;
+  const whatsappLink = createWhatsAppLinkWithoutNo(message);
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -42,7 +45,7 @@ export default function ProductCard({
               <img
                 src={displayImage}
                 alt={product.name}
-                className="h-full w-full transform rounded-t-2xl object-cover transition-transform duration-500 hover:scale-105"
+                className="h-full w-full transform rounded-t-2xl object-cover object-center transition-transform duration-500 hover:scale-105"
               />
             ) : (
               <div className="flex h-full w-full items-center justify-center rounded-t-2xl bg-gray-100 dark:bg-gray-800">
@@ -72,7 +75,10 @@ export default function ProductCard({
           </Button>
           {!isAuthenticated && (
             <Button asChild variant="primary" className="flex-1">
-              <Link href={`/products/${product.id}/buy`}>Buy Now</Link>
+              {/* <Link href={`/products/${product.id}/buy`}>Buy Now</Link> */}
+              <a href={whatsappLink} target="_blank" rel="noopener noreferrer">
+                Buy Now
+              </a>
             </Button>
           )}
 

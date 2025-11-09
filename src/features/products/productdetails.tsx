@@ -11,15 +11,19 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 
 import { Product } from "@/types/domain/product";
-import { getProductById } from "@/lib/api";
+import { getProductById } from "@/services/products/products.service";
 import { createWhatsAppLinkWithoutNo, formatPrice } from "@/lib/utils";
 import { Button } from "@/components/ui/Button"; // Corrected lowercase path
 import { useQuery } from "@tanstack/react-query"; // 1. Import useQuery
+import { useDeleteProduct } from "@/hooks/useProducts";
 
 export default function ProductDetailsPage() {
   const params = useParams();
   const searchParams = useSearchParams();
   const id = params.id || searchParams.get("productId");
+
+  // Always call hooks at the top level, before any conditional returns
+  const deleteMutation = useDeleteProduct();
 
   // 2. Replace useState/useEffect with useQuery
   const {
@@ -29,7 +33,7 @@ export default function ProductDetailsPage() {
     error,
   } = useQuery<Product, Error>({
     queryKey: ["product", id], // Dynamic query key
-    queryFn: () => getProductById(id as string),
+    queryFn: () => getProductById(parseInt(id as string)),
     enabled: !!id, // Only run the query if 'id' exists
   });
 
@@ -81,8 +85,15 @@ export default function ProductDetailsPage() {
 
   const handleDelete = async (productId: number) => {
     if (confirm("Are you sure you want to delete this product?")) {
-      // TODO: Implement delete API call
-      console.log("Delete product:", productId);
+      deleteMutation.mutate(productId, {
+        onSuccess: () => {
+          // Product deleted successfully, redirect to products page
+          window.location.href = "/products";
+        },
+        onError: (error) => {
+          alert(`Failed to delete product: ${error.message}`);
+        },
+      });
     }
   };
 

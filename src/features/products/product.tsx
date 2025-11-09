@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useProducts } from "@/hooks/useProducts";
+import { useProducts, useDeleteProduct } from "@/hooks/useProducts";
 import { useAuth } from "@/hooks/useAuth";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import ProductHeader from "./ProductHeader";
@@ -15,11 +15,18 @@ export default function Products() {
 
   // Use custom hook for data fetching
   const { data: products, isLoading, isError, error } = useProducts();
+  const deleteMutation = useDeleteProduct();
 
   const handleDelete = async (productId: number) => {
     if (confirm("Are you sure you want to delete this product?")) {
-      // TODO: Implement delete API call
-      console.log("Delete product:", productId);
+      deleteMutation.mutate(productId, {
+        onSuccess: () => {
+          // Product deleted successfully, query will be invalidated automatically
+        },
+        onError: (error) => {
+          alert(`Failed to delete product: ${error.message}`);
+        },
+      });
     }
   };
 
