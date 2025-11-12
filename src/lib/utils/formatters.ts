@@ -24,7 +24,7 @@ export const createWhatsAppLink = (phoneNumber: string, message: string): string
 // Your specific function with a hardcoded number
 export const createWhatsAppLinkWithoutNo = (message: string): string => {
   const encodedMessage = encodeURIComponent(message);
-  const phoneNumber = "917654943354";
+  const phoneNumber = "919955084682";
   return `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
 };
 
