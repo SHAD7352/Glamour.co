@@ -73,12 +73,23 @@ export default function ProductDetailsPage() {
     );
   }
 
-  // 7. Build full image URLs from the API base URL
-  const baseUrl = process.env.NEXT_PUBLIC_URL;
+  // 7. Use Cloudflare R2 public domain for images
+  const R2_PUBLIC_DOMAIN = process.env.NEXT_PUBLIC_R2_DOMAIN || 'https://pub-ff7d91c76708455393e73ce049051059.r2.dev';
+
+  const getImageUrl = (path?: string) => {
+    if (!path) return '/images/placeholder.jpg';
+    // If already a full URL (starts with http), return as-is
+    if (path.startsWith('http')) return path;
+    // Otherwise, construct full URL from R2 domain + relative path
+    return `${R2_PUBLIC_DOMAIN}/${path}`;
+  };
+
   const displayImages =
     product.imageUrls && product.imageUrls.length > 0
-      ? product.imageUrls.map((img) => `${baseUrl}${img}`)
-      : null;
+      ? product.imageUrls.map(getImageUrl)
+      : product.coverImageUrl
+        ? [getImageUrl(product.coverImageUrl)]
+        : null;
 
   const message = `Hi, I am interested in ${product.name}. Please share more details.`;
   const whatsappLink = createWhatsAppLinkWithoutNo(message);

@@ -17,16 +17,23 @@ export default function ProductCard({
   isAuthenticated,
   onDelete,
 }: ProductCardProps) {
-  // 1. Get the base URL from environment variables
-  const baseUrl = process.env.NEXT_PUBLIC_URL;
+  // 1. Cloudflare R2 public domain from environment or default
+  const R2_PUBLIC_DOMAIN = process.env.NEXT_PUBLIC_R2_DOMAIN || 'https://pub-ff7d91c76708455393e73ce049051059.r2.dev';
 
-  // 2. Get the first image path from the array
-  const relativeImageUrl = product.imageUrls?.[0];
+  const getImageUrl = (path?: string) => {
+    if (!path) return null;
+    // If already a full URL (starts with http), return as-is
+    if (path.startsWith('http')) return path;
+    // Otherwise, construct full URL from R2 domain + relative path
+    return `${R2_PUBLIC_DOMAIN}/${path}`;
+  };
 
-  // 3. Build the full URL (if an image exists) or use null for no image
-  const displayImage = relativeImageUrl
-    ? `${baseUrl}${relativeImageUrl}`
-    : null;
+  // 2. Get the cover image or first image from the array
+  const displayImage = product.coverImageUrl
+    ? getImageUrl(product.coverImageUrl)
+    : product.imageUrls?.[0]
+      ? getImageUrl(product.imageUrls[0])
+      : null;
 
   const message = `Hi, I am interested in ${product.name}. Please share more details.`;
   const whatsappLink = createWhatsAppLinkWithoutNo(message);

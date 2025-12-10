@@ -3,7 +3,8 @@ export type Product = {
   name: string;
   description?: string;
   price: number;
-  imageUrls?: string[]; // <-- It's an array of strings
+  coverImageUrl?: string; // Cover image for the product
+  imageUrls?: string[]; // Additional product images
   shortDescription?: string;
   image?: string;
 };
@@ -27,5 +28,5 @@ export type Product = {
 //   products: Product[];
 //   isLoading: boolean;
 //   error: string | null;
-//   selectedProduct: Product | null;      
+//   selectedProduct: Product | null;
 // }

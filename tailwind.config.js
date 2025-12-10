@@ -39,6 +39,7 @@ module.exports = {
         white: "#FFFFFF",
         black: "#121723",
         dark: "#1D2430",
+        "dark-2": "#1A1F2C", // Added for product cards
         primary: "#4A6CF7",
         yellow: "#FBB040",
         "body-color": "#788293",

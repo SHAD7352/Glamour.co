@@ -5,7 +5,8 @@ import { Product } from "@/types/domain/product"; // Assuming you have a Product
  * @returns A promise that resolves to an array of products.
  */
 export const getProducts = async (): Promise<Product[]> => {
-    const res = await fetch("/api/products");
+    debugger;
+    const res = await fetch("/products");
     if (!res.ok) {
         throw new Error("Failed to fetch products");
     }

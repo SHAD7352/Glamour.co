@@ -6,11 +6,16 @@ const nextConfig = {
       {
         protocol: "https",
         hostname: "localhost",
-        port: "7188", // Your API's port
-        pathname: "/images/**", // Allow all images from this path
+        port: "7188",
+        pathname: "/images/**",
+      },
+      {
+        protocol: "https",
+        hostname: "pub-ff7d91c76708455393e73ce049051059.r2.dev",
+        pathname: "/**",
       },
     ],
-    unoptimized: true, // Disable Next.js image optimization for external images
+    unoptimized: true,
   },
 };
 
