@@ -9,12 +9,14 @@ import CartButton from '@/components/cart/CartButton';
 import { useState, useMemo } from 'react';
 import { Search, SlidersHorizontal, Grid3x3, List } from 'lucide-react';
 import { Product } from '@/types/domain/product';
+import { useAuth } from '@/hooks/useAuth';
 
 type SortOption = 'newest' | 'price-low' | 'price-high' | 'name-asc' | 'name-desc';
 type ViewMode = 'grid' | 'list';
 
 export default function ProductsPage() {
   const queryClient = useQueryClient();
+  const { isAuthenticated } = useAuth();
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<Product | undefined>();
@@ -100,10 +102,10 @@ export default function ProductsPage() {
 
   return (
     <>
-      <section className="bg-gray-light py-16 pt-24 dark:bg-bg-color-dark md:pt-32">
+      <section className="bg-gray-light py-16 pt-24 dark:bg-bg-color-dark md:pt-25">
         <div className="container">
           {/* Header */}
-          <div className="mb-12 flex flex-col items-center justify-between gap-6 md:flex-row">
+          <div className="mb-2 flex flex-col items-center justify-between gap-6 md:flex-row">
             <div className="w-full text-center md:text-left">
               <h1 className="mb-4 bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-3xl font-bold !leading-tight text-transparent sm:text-4xl md:text-[45px]">
                 Our Exclusive Collection
@@ -113,16 +115,18 @@ export default function ProductsPage() {
               </p>
             </div>
 
-            <button
-              onClick={handleAdd}
-              className="whitespace-nowrap rounded-full bg-gradient-to-r from-primary to-purple-600 px-8 py-4 text-base font-semibold text-white shadow-md transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-xl"
-            >
-              + Upload Product
-            </button>
+            {isAuthenticated && (
+              <button
+                onClick={handleAdd}
+                className="whitespace-nowrap rounded-full bg-gradient-to-r from-primary to-purple-600 px-8 py-4 text-base font-semibold text-white shadow-md transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-xl"
+              >
+                + Upload Product
+              </button>
+            )}
           </div>
 
           {/* Filters and Search */}
-          <div className="mb-8 flex flex-col gap-4 rounded-2xl bg-white p-6 shadow-md dark:bg-dark-2 lg:flex-row lg:items-center">
+          <div className="mb-4 flex flex-col gap-4 rounded-2xl bg-white p-6 shadow-md dark:bg-dark-2 lg:flex-row lg:items-center">
             {/* Search Bar */}
             <div className="relative flex-1">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-body-color" size={20} />
@@ -228,7 +232,7 @@ export default function ProductsPage() {
                 product={product}
                 onEdit={handleEdit}
                 onDelete={handleDelete}
-                showAdminActions={true}
+                showAdminActions={isAuthenticated}
               />
             ))}
           </div>

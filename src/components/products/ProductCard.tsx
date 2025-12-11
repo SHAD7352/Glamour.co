@@ -136,7 +136,7 @@ const ProductCard = ({ product, onEdit, onDelete, showAdminActions = false }: Pr
 
                     <div className="mb-4 flex items-center justify-between">
                         <span className="text-2xl font-bold text-primary">
-                            ${product.price?.toFixed(2)}
+                            ₹{product.price?.toFixed(2)}
                         </span>
                         {inCart && (
                             <span className="rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-700 dark:bg-green-900/30 dark:text-green-400">

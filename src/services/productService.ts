@@ -1,10 +1,6 @@
-import axios from 'axios';
+import { apiClient } from './api/client';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://localhost:7188/api/';
-
-const api = axios.create({
-    baseURL: `${API_URL}`,
-});
 
 export interface Product {
     id: number;
@@ -33,12 +29,12 @@ export interface UpdateProductDto {
 
 export const productService = {
     getAllProducts: async () => {
-        const response = await api.get<Product[]>('Product');
+        const response = await apiClient.get<Product[]>('Product');
         return response.data;
     },
 
     getProductById: async (id: number) => {
-        const response = await api.get<Product>(`Product/${id}`);
+        const response = await apiClient.get<Product>(`Product/${id}`);
         return response.data;
     },
 
@@ -58,7 +54,7 @@ export const productService = {
             });
         }
 
-        const response = await api.post<Product>('Product', formData, {
+        const response = await apiClient.post<Product>('Product', formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },
@@ -83,7 +79,7 @@ export const productService = {
             });
         }
 
-        const response = await api.put<Product>(`Product/${id}`, formData, {
+        const response = await apiClient.put<Product>(`Product/${id}`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },
@@ -93,7 +89,7 @@ export const productService = {
 
     deleteProduct: async (id: number) => {
         debugger;
-        const response = await api.delete(`Product/${id}`);
+        const response = await apiClient.delete(`Product/${id}`);
         return response.data;
     },
 };

@@ -106,7 +106,7 @@ export default function Cart({ isOpen, onClose }: CartProps) {
                                                 <h4 className="mb-1 line-clamp-1 text-sm font-semibold text-dark dark:text-white">
                                                     {item.name}
                                                 </h4>
-                                                <p className="text-sm font-bold text-primary">${item.price.toFixed(2)}</p>
+                                                <p className="text-sm font-bold text-primary">₹{item.price.toFixed(2)}</p>
                                             </div>
 
                                             {/* Quantity Controls */}
@@ -148,7 +148,7 @@ export default function Cart({ isOpen, onClose }: CartProps) {
                             <div className="absolute bottom-0 left-0 right-0 border-t border-stroke bg-white p-6 dark:border-gray-700 dark:bg-dark-2">
                                 <div className="mb-4 flex items-center justify-between">
                                     <span className="text-lg font-semibold text-dark dark:text-white">Total</span>
-                                    <span className="text-2xl font-bold text-primary">${getTotalPrice().toFixed(2)}</span>
+                                    <span className="text-2xl font-bold text-primary">₹{getTotalPrice().toFixed(2)}</span>
                                 </div>
 
                                 <button

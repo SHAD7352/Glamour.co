@@ -35,12 +35,12 @@ export function generateOrderMessage(
 
         message += `${index + 1}. ${item.name}\n`;
         message += `   Quantity: ${item.quantity}\n`;
-        message += `   Price: $${item.price.toFixed(2)}\n`;
-        message += `   Subtotal: $${itemTotal.toFixed(2)}\n\n`;
+        message += `   Price: ₹${item.price.toFixed(2)}\n`;
+        message += `   Subtotal: ₹${itemTotal.toFixed(2)}\n\n`;
     });
 
     message += `📦 Total Items: ${cartItems.reduce((sum, item) => sum + item.quantity, 0)}\n`;
-    message += `💰 Total Amount: $${subtotal.toFixed(2)}\n\n`;
+    message += `💰 Total Amount: ₹${subtotal.toFixed(2)}\n\n`;
     message += `Please confirm my order. Thank you!`;
 
     return message;
@@ -81,7 +81,7 @@ export function generateProductInquiry(product: Product): string {
     let message = `Hello! 👋\n\n`;
     message += `I'm interested in the following product:\n\n`;
     message += `📦 ${product.name}\n`;
-    message += `💰 Price: $${product.price.toFixed(2)}\n\n`;
+    message += `💰 Price: ₹${product.price.toFixed(2)}\n\n`;
     message += `${product.description}\n\n`;
     message += `Is this item available? Thank you!`;
 

@@ -5,9 +5,13 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import ThemeToggler from "./ThemeToggler";
 import { menuData } from "@/data";
+import { useAuth } from "@/hooks/useAuth";
+import { LogOut, LogIn, User } from "lucide-react";
 
 const Header = () => {
   const [navbarOpen, setNavbarOpen] = useState(false);
+  const { isAuthenticated, user, logout } = useAuth();
+
   const navbarToggleHandler = () => {
     setNavbarOpen(!navbarOpen);
   };
@@ -38,13 +42,18 @@ const Header = () => {
 
   const usePathName = usePathname();
 
+  const handleLogout = () => {
+    logout();
+    // Optionally redirect to home page after logout
+    window.location.href = '/';
+  };
+
   return (
     <header
-      className={`header left-0 top-0 z-40 flex w-full items-center ${
-        sticky
+      className={`header left-0 top-0 z-40 flex w-full items-center ${sticky
           ? "fixed z-[9999] bg-white !bg-opacity-80 shadow-sticky backdrop-blur-sm transition dark:bg-gray-dark dark:shadow-sticky-dark"
           : "absolute bg-transparent"
-      }`}
+        }`}
     >
       <div className="container">
         <div className="relative -mx-4 flex items-center justify-between">
@@ -69,28 +78,24 @@ const Header = () => {
                 className="absolute right-4 top-1/2 block translate-y-[-50%] rounded-lg px-3 py-[6px] ring-primary focus:ring-2 lg:hidden"
               >
                 <span
-                  className={`relative my-1.5 block h-0.5 w-[30px] bg-black transition-all duration-300 dark:bg-white ${
-                    navbarOpen ? "top-[7px] rotate-45" : " "
-                  }`}
+                  className={`relative my-1.5 block h-0.5 w-[30px] bg-black transition-all duration-300 dark:bg-white ${navbarOpen ? "top-[7px] rotate-45" : " "
+                    }`}
                 />
                 <span
-                  className={`relative my-1.5 block h-0.5 w-[30px] bg-black transition-all duration-300 dark:bg-white ${
-                    navbarOpen ? "opacity-0" : " "
-                  }`}
+                  className={`relative my-1.5 block h-0.5 w-[30px] bg-black transition-all duration-300 dark:bg-white ${navbarOpen ? "opacity-0" : " "
+                    }`}
                 />
                 <span
-                  className={`relative my-1.5 block h-0.5 w-[30px] bg-black transition-all duration-300 dark:bg-white ${
-                    navbarOpen ? "top-[-8px] -rotate-45" : " "
-                  }`}
+                  className={`relative my-1.5 block h-0.5 w-[30px] bg-black transition-all duration-300 dark:bg-white ${navbarOpen ? "top-[-8px] -rotate-45" : " "
+                    }`}
                 />
               </button>
               <nav
                 id="navbarCollapse"
-                className={`navbar absolute right-0 z-30 w-[250px] rounded border-[.5px] border-body-color/50 bg-white px-6 py-4 duration-300 dark:border-body-color/20 dark:bg-dark lg:visible lg:static lg:w-auto lg:border-none lg:!bg-transparent lg:p-0 lg:opacity-100 ${
-                  navbarOpen
+                className={`navbar absolute right-0 z-30 w-[250px] rounded border-[.5px] border-body-color/50 bg-white px-6 py-4 duration-300 dark:border-body-color/20 dark:bg-dark lg:visible lg:static lg:w-auto lg:border-none lg:!bg-transparent lg:p-0 lg:opacity-100 ${navbarOpen
                     ? "visibility top-full opacity-100"
                     : "invisible top-[120%] opacity-0"
-                }`}
+                  }`}
               >
                 <ul className="block lg:flex lg:space-x-12">
                   {menuData.map((menuItem, index) => (
@@ -98,11 +103,10 @@ const Header = () => {
                       {menuItem.path ? (
                         <Link
                           href={menuItem.path}
-                          className={`flex py-2 text-base lg:mr-0 lg:inline-flex lg:px-0 lg:py-6 ${
-                            usePathName === menuItem.path
+                          className={`flex py-2 text-base lg:mr-0 lg:inline-flex lg:px-0 lg:py-6 ${usePathName === menuItem.path
                               ? "text-primary dark:text-white"
                               : "text-dark hover:text-primary dark:text-white/70 dark:hover:text-white"
-                          }`}
+                            }`}
                         >
                           {menuItem.title}
                         </Link>
@@ -125,9 +129,8 @@ const Header = () => {
                             </span>
                           </p>
                           <div
-                            className={`submenu relative left-0 top-full rounded-sm bg-white transition-[top] duration-300 group-hover:opacity-100 dark:bg-dark lg:invisible lg:absolute lg:top-[110%] lg:block lg:w-[250px] lg:p-4 lg:opacity-0 lg:shadow-lg lg:group-hover:visible lg:group-hover:top-full ${
-                              openIndex === index ? "block" : "hidden"
-                            }`}
+                            className={`submenu relative left-0 top-full rounded-sm bg-white transition-[top] duration-300 group-hover:opacity-100 dark:bg-dark lg:invisible lg:absolute lg:top-[110%] lg:block lg:w-[250px] lg:p-4 lg:opacity-0 lg:shadow-lg lg:group-hover:visible lg:group-hover:top-full ${openIndex === index ? "block" : "hidden"
+                              }`}
                           >
                             {menuItem.submenu &&
                               menuItem.submenu.map((submenuItem, subIndex) => (
@@ -147,10 +150,38 @@ const Header = () => {
                 </ul>
               </nav>
             </div>
-            <div className="flex items-center justify-end pr-16 lg:pr-0">
+            <div className="flex items-center justify-end gap-3 pr-16 lg:pr-0">
               <div>
                 <ThemeToggler />
               </div>
+
+              {/* Authentication Controls */}
+              {isAuthenticated ? (
+                <div className="flex items-center gap-3">
+                  <div className="hidden items-center gap-2 rounded-full bg-primary/10 px-4 py-2 dark:bg-primary/20 sm:flex">
+                    <User size={16} className="text-primary" />
+                    <span className="text-sm font-medium text-dark dark:text-white">
+                      {user?.name || user?.email}
+                    </span>
+                  </div>
+                  <button
+                    onClick={handleLogout}
+                    className="flex items-center gap-2 rounded-full bg-red-500 px-4 py-2 text-sm font-semibold text-white transition-all hover:bg-red-600 hover:scale-105"
+                    title="Logout"
+                  >
+                    <LogOut size={16} />
+                    <span className="hidden sm:inline">Logout</span>
+                  </button>
+                </div>
+              ) : (
+                <Link
+                  href="/signin"
+                  className="flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-white transition-all hover:bg-primary/90 hover:scale-105"
+                >
+                  <LogIn size={16} />
+                  <span className="hidden sm:inline">Sign In</span>
+                </Link>
+              )}
             </div>
           </div>
         </div>
