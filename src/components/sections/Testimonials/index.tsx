@@ -5,28 +5,28 @@ import SingleTestimonial from "./SingleTestimonial";
 const testimonialData: Testimonial[] = [
   {
     id: 1,
-    name: "Sarah Johnson",
-    designation: "Wedding Planner",
+    name: "Priya Sharma",
+    designation: "Wedding Planner, Delhi",
     content:
-      "The flowers were absolutely stunning! The team created the perfect bridal bouquet that exceeded all our expectations. Fresh, beautiful, and delivered right on time.",
+      "The flowers were absolutely stunning! The team created the perfect bridal bouquet that exceeded all our expectations. Fresh, beautiful, and delivered right on time for my client's wedding.",
     image: "/images/testimonials/auth-01.png",
     star: 5,
   },
   {
     id: 2,
-    name: "Michael Chen",
-    designation: "Event Coordinator",
+    name: "Rajesh Patel",
+    designation: "Event Manager, Mumbai",
     content:
-      "Professional service and incredible attention to detail. The custom arrangements for our corporate event were gorgeous and lasted beautifully throughout the entire evening.",
+      "Professional service and incredible attention to detail. The custom arrangements for our corporate event were gorgeous and lasted beautifully throughout the entire evening. Highly recommended!",
     image: "/images/testimonials/auth-02.png",
     star: 5,
   },
   {
     id: 3,
-    name: "Emily Rodriguez",
-    designation: "Happy Customer",
+    name: "Aisha Khan",
+    designation: "Loyal Customer, Bangalore",
     content:
-      "I've been ordering flowers from them for years. Every bouquet is fresh, beautifully arranged, and brings so much joy. Their same-day delivery is always reliable.",
+      "I've been ordering flowers from them for years. Every bouquet is fresh, beautifully arranged, and brings so much joy. Their same-day delivery is always reliable and the quality is exceptional.",
     image: "/images/testimonials/auth-03.png",
     star: 5,
   },
