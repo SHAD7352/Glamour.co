@@ -1,7 +1,15 @@
 import { Product } from './productService';
 
-interface CartItem extends Product {
-    quantity: number;
+interface CartItem {
+  id: number;
+  name: string;
+  description?: string;
+  price: number;
+  coverImageUrl?: string;
+  imageUrls?: string[];
+  shortDescription?: string;
+  image?: string;
+  quantity: number;
 }
 
 interface WhatsAppOrderConfig {

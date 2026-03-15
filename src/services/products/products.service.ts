@@ -25,6 +25,7 @@ export const createProduct = async (formData: FormData): Promise<Product> => {
 
 // This function knows HOW to update a product
 export const updateProduct = async (id: number, formData: FormData): Promise<Product> => {
+  console.log(`Updating product with ID: ${id} at endpoint Product/${id}`);
   const response = await apiClient.put(`Product/${id}`, formData, {
     headers: {
       'Content-Type': 'multipart/form-data',

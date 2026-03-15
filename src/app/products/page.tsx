@@ -1,18 +1,25 @@
-'use client';
+"use client";
 
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { productService } from '@/services/productService';
-import ProductCard from '@/components/products/ProductCard';
-import ProductFormModal from '@/components/products/ProductFormModal';
-import Cart from '@/components/cart/Cart';
-import CartButton from '@/components/cart/CartButton';
-import { useState, useMemo } from 'react';
-import { Search, SlidersHorizontal, Grid3x3, List } from 'lucide-react';
-import { Product } from '@/types/domain/product';
-import { useAuth } from '@/hooks/useAuth';
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { productService } from "@/services/productService";
+import OptimizedProductCard from "@/components/products/OptimizedProductCard";
+import ProductFormModal from "@/components/products/ProductFormModal";
+import Cart from "@/components/cart/Cart";
+import CartButton from "@/components/cart/CartButton";
+import Pagination from "@/components/products/Pagination";
+import { useState, useMemo } from "react";
+import { Search, SlidersHorizontal, Grid3x3, List } from "lucide-react";
+import { Product } from "@/types/domain/product";
+import { useAuth } from "@/hooks/useAuth";
 
-type SortOption = 'newest' | 'price-low' | 'price-high' | 'name-asc' | 'name-desc';
-type ViewMode = 'grid' | 'list';
+type SortOption =
+  | "newest"
+  | "price-low"
+  | "price-high"
+  | "name-asc"
+  | "name-desc";
+type ViewMode = "grid" | "list";
+const ITEMS_PER_PAGE = 12;
 
 export default function ProductsPage() {
   const queryClient = useQueryClient();
@@ -20,25 +27,31 @@ export default function ProductsPage() {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<Product | undefined>();
-  const [modalMode, setModalMode] = useState<'create' | 'edit'>('create');
-  const [searchQuery, setSearchQuery] = useState('');
-  const [sortBy, setSortBy] = useState<SortOption>('newest');
-  const [viewMode, setViewMode] = useState<ViewMode>('grid');
+  const [modalMode, setModalMode] = useState<"create" | "edit">("create");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [sortBy, setSortBy] = useState<SortOption>("newest");
+  const [viewMode, setViewMode] = useState<ViewMode>("grid");
   const [priceRange, setPriceRange] = useState({ min: 0, max: 10000 });
+  const [currentPage, setCurrentPage] = useState(1);
 
-  const { data: products, isLoading, error } = useQuery({
-    queryKey: ['products'],
+  const {
+    data: products,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["products"],
     queryFn: productService.getAllProducts,
+    staleTime: 5 * 60 * 1000, // Cache for 5 minutes
   });
 
   const deleteMutation = useMutation({
     mutationFn: productService.deleteProduct,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['products'] });
+      queryClient.invalidateQueries({ queryKey: ["products"] });
     },
     onError: (error) => {
-      console.error('Failed to delete product:', error);
-      alert('Failed to delete product. Please try again.');
+      console.error("Failed to delete product:", error);
+      alert("Failed to delete product. Please try again.");
     },
   });
 
@@ -49,7 +62,10 @@ export default function ProductsPage() {
     let filtered = products.filter((product) => {
       const matchesSearch =
         product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        product.description.toLowerCase().includes(searchQuery.toLowerCase());
+        (product.description
+          ?.toLowerCase()
+          .includes(searchQuery.toLowerCase()) ??
+          false);
 
       const matchesPrice =
         product.price >= priceRange.min && product.price <= priceRange.max;
@@ -60,38 +76,52 @@ export default function ProductsPage() {
     // Sort products
     filtered.sort((a, b) => {
       switch (sortBy) {
-        case 'price-low':
+        case "price-low":
           return a.price - b.price;
-        case 'price-high':
+        case "price-high":
           return b.price - a.price;
-        case 'name-asc':
+        case "name-asc":
           return a.name.localeCompare(b.name);
-        case 'name-desc':
+        case "name-desc":
           return b.name.localeCompare(a.name);
-        case 'newest':
+        case "newest":
         default:
-          return b.id - a.id; // Assuming higher ID means newer
+          return b.id - a.id;
       }
     });
 
     return filtered;
   }, [products, searchQuery, sortBy, priceRange]);
 
+  // Paginate products
+  const totalPages = Math.ceil(
+    filteredAndSortedProducts.length / ITEMS_PER_PAGE,
+  );
+  const paginatedProducts = useMemo(() => {
+    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+    const endIndex = startIndex + ITEMS_PER_PAGE;
+    return filteredAndSortedProducts.slice(startIndex, endIndex);
+  }, [filteredAndSortedProducts, currentPage]);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    // Scroll to top of products
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   const handleDelete = (productId: number) => {
-    console.log('Products page handleDelete called with ID:', productId);
-    console.log('Calling deleteMutation.mutate...');
     deleteMutation.mutate(productId);
   };
 
   const handleEdit = (product: Product) => {
     setSelectedProduct(product);
-    setModalMode('edit');
+    setModalMode("edit");
     setIsModalOpen(true);
   };
 
   const handleAdd = () => {
     setSelectedProduct(undefined);
-    setModalMode('create');
+    setModalMode("create");
     setIsModalOpen(true);
   };
 
@@ -102,7 +132,7 @@ export default function ProductsPage() {
 
   return (
     <>
-      <section className="bg-gray-light py-16 pt-24 dark:bg-bg-color-dark md:pt-25">
+      <section className="md:pt-25 bg-gray-light py-16 pt-24 dark:bg-bg-color-dark">
         <div className="container">
           {/* Header */}
           <div className="mb-2 flex flex-col items-center justify-between gap-6 md:flex-row">
@@ -129,12 +159,18 @@ export default function ProductsPage() {
           <div className="mb-4 flex flex-col gap-4 rounded-2xl bg-white p-6 shadow-md dark:bg-dark-2 lg:flex-row lg:items-center">
             {/* Search Bar */}
             <div className="relative flex-1">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-body-color" size={20} />
+              <Search
+                className="absolute left-4 top-1/2 -translate-y-1/2 text-body-color"
+                size={20}
+              />
               <input
                 type="text"
                 placeholder="Search products..."
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={(e) => {
+                  setSearchQuery(e.target.value);
+                  setCurrentPage(1); // Reset to first page on search
+                }}
                 className="w-full rounded-lg border border-stroke bg-gray-50 py-3 pl-12 pr-4 text-dark outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 dark:border-gray-700 dark:bg-dark dark:text-white"
               />
             </div>
@@ -144,7 +180,10 @@ export default function ProductsPage() {
               <SlidersHorizontal size={20} className="text-body-color" />
               <select
                 value={sortBy}
-                onChange={(e) => setSortBy(e.target.value as SortOption)}
+                onChange={(e) => {
+                  setSortBy(e.target.value as SortOption);
+                  setCurrentPage(1); // Reset to first page on sort
+                }}
                 className="rounded-lg border border-stroke bg-gray-50 px-4 py-3 text-dark outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 dark:border-gray-700 dark:bg-dark dark:text-white"
               >
                 <option value="newest">Newest First</option>
@@ -158,21 +197,23 @@ export default function ProductsPage() {
             {/* View Mode Toggle */}
             <div className="flex gap-2 rounded-lg border border-stroke p-1 dark:border-gray-700">
               <button
-                onClick={() => setViewMode('grid')}
-                className={`rounded-lg p-2 transition-colors ${viewMode === 'grid'
-                  ? 'bg-primary text-white'
-                  : 'text-body-color hover:bg-gray-100 dark:hover:bg-gray-800'
-                  }`}
+                onClick={() => setViewMode("grid")}
+                className={`rounded-lg p-2 transition-colors ${
+                  viewMode === "grid"
+                    ? "bg-primary text-white"
+                    : "text-body-color hover:bg-gray-100 dark:hover:bg-gray-800"
+                }`}
                 title="Grid view"
               >
                 <Grid3x3 size={20} />
               </button>
               <button
-                onClick={() => setViewMode('list')}
-                className={`rounded-lg p-2 transition-colors ${viewMode === 'list'
-                  ? 'bg-primary text-white'
-                  : 'text-body-color hover:bg-gray-100 dark:hover:bg-gray-800'
-                  }`}
+                onClick={() => setViewMode("list")}
+                className={`rounded-lg p-2 transition-colors ${
+                  viewMode === "list"
+                    ? "bg-primary text-white"
+                    : "text-body-color hover:bg-gray-100 dark:hover:bg-gray-800"
+                }`}
                 title="List view"
               >
                 <List size={20} />
@@ -183,8 +224,15 @@ export default function ProductsPage() {
           {/* Results Count */}
           {!isLoading && !error && (
             <div className="mb-6 text-sm text-body-color">
-              Showing <span className="font-semibold text-dark dark:text-white">{filteredAndSortedProducts.length}</span> of{' '}
-              <span className="font-semibold text-dark dark:text-white">{products?.length || 0}</span> products
+              Showing{" "}
+              <span className="font-semibold text-dark dark:text-white">
+                {paginatedProducts.length}
+              </span>{" "}
+              of{" "}
+              <span className="font-semibold text-dark dark:text-white">
+                {filteredAndSortedProducts.length}
+              </span>{" "}
+              products
             </div>
           )}
 
@@ -208,12 +256,12 @@ export default function ProductsPage() {
           {!isLoading && !error && filteredAndSortedProducts.length === 0 && (
             <div className="rounded-2xl bg-white p-20 text-center shadow-md dark:bg-dark-2">
               <h3 className="mb-2 text-xl font-semibold text-dark dark:text-white">
-                {searchQuery ? 'No products found' : 'No products yet'}
+                {searchQuery ? "No products found" : "No products yet"}
               </h3>
               <p className="text-body-color">
                 {searchQuery
-                  ? 'Try adjusting your search or filters'
-                  : 'Start by uploading your first product!'}
+                  ? "Try adjusting your search or filters"
+                  : "Start by uploading your first product!"}
               </p>
             </div>
           )}
@@ -221,21 +269,39 @@ export default function ProductsPage() {
           {/* Products Grid/List */}
           <div
             className={
-              viewMode === 'grid'
-                ? 'grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
-                : 'flex flex-col gap-6'
+              viewMode === "grid"
+                ? "grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+                : "flex flex-col gap-6"
             }
           >
-            {filteredAndSortedProducts?.map((product) => (
-              <ProductCard
-                key={product.id}
-                product={product}
-                onEdit={handleEdit}
-                onDelete={handleDelete}
-                showAdminActions={isAuthenticated}
-              />
-            ))}
+            {isLoading
+              ? // Show skeletons while loading
+                Array.from({ length: ITEMS_PER_PAGE }).map((_, index) => (
+                  <div
+                    key={index}
+                    className="h-80 animate-pulse rounded-2xl bg-gray-200 dark:bg-gray-700"
+                  />
+                ))
+              : paginatedProducts?.map((product) => (
+                  <OptimizedProductCard
+                    key={product.id}
+                    product={product}
+                    onEdit={handleEdit}
+                    onDelete={handleDelete}
+                    showAdminActions={isAuthenticated}
+                  />
+                ))}
           </div>
+
+          {/* Pagination */}
+          {!isLoading && filteredAndSortedProducts.length > ITEMS_PER_PAGE && (
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+              isLoading={isLoading}
+            />
+          )}
         </div>
       </section>
 
