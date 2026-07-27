@@ -156,7 +156,7 @@ const OptimizedProductCard = ({
 
         <div className="mb-4 flex items-center justify-between">
           <span className="text-2xl font-bold text-rose-600 dark:text-rose-400">
-            ${product.price?.toFixed(2) || "0.00"}
+            ₹{product.price?.toFixed(2) || "0.00"}
           </span>
         </div>
 
